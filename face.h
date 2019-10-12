@@ -13,7 +13,9 @@ public:
   std::vector<QVector3D> vertices;
   QVector3D normal;
   float c;
-  float c_temp;
+  float c_R;
+  float c_G;
+  float c_B;
 
   QJsonObject toJson() const;
   void fromJson(const QJsonObject &json);

@@ -45,6 +45,7 @@ public:
   int colorR = 0;
   int colorG = 0;
   int colorB = 0;
+  void save_color_volume(void);
 
   int counter = 0;
   bool first_paint = true;

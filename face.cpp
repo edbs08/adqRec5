@@ -170,7 +170,9 @@ void FaceCollection::analyze_loaded_object(void)
     for (int face_index=0;face_index<faces.size();face_index++)
     {
         /*Analysis for the colors and shapes*/
-        faces[face_index].c_temp = faces[face_index].c;
+        faces[face_index].c_R = faces[face_index].c;
+        faces[face_index].c_G = faces[face_index].c;
+        faces[face_index].c_B = faces[face_index].c;
         if (std::find(colors.begin(), colors.end(),faces[face_index].c)==colors.end())
         {
             cout<<"found new color "<<faces[face_index].c<<endl;

@@ -3,11 +3,12 @@
 #include <QFileDialog>
 #include <iostream>
 
+using namespace std;
 ViewerWidget::ViewerWidget() {
   layout = new QGridLayout(this);
   load_file_button = new QPushButton("Load file");
   save_file_button = new QPushButton("Save Image");
-
+  save_color = new QPushButton("Save Color for Volume");
   gl_widget = new GLWidget(this);
 
   layout->addWidget(load_file_button, 0, 0);
@@ -48,6 +49,11 @@ ViewerWidget::ViewerWidget() {
   slider-> setRange(0,255);
   slider-> setTickInterval(1);
   connect(slider_B, SIGNAL(valueChanged(int)), this, SLOT(update_slider_B(int)));
+
+  layout->addWidget(save_color);
+  connect(save_color, SIGNAL(released()), this, SLOT(saveColor()));
+
+
 }
 
 void ViewerWidget::reload_buttons(void)
@@ -110,4 +116,11 @@ void ViewerWidget::update_slider_B(int B)
     gl_widget ->update_volume_color(sliderR,sliderG,sliderB);
     gl_widget-> update();
 
+}
+
+void ViewerWidget::saveColor(void)
+{
+    cout<<"save color"<<endl;
+    gl_widget ->save_color_volume();
+    gl_widget-> update();
 }

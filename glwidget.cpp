@@ -211,9 +211,9 @@ void GLWidget::paintGL() {
                face = face_collection.faces[face_index];
           }
 
-          cR = face.c;
-          cG = face.c;
-          cB = face.c;
+          cR = face.c_R;
+          cG = face.c_G;
+          cB = face.c_B;
           if(face.c == face_collection.colors[volume_selected])
           {
               cR = (float)colorR/255;
@@ -290,6 +290,19 @@ void GLWidget::update_volume_color(int R, int G, int B)
     colorR = R;
     colorG = G;
     colorB = B;
+}
+
+void GLWidget::save_color_volume(void)
+{
+    for (int face_index=0;face_index<face_collection.faces.size();face_index++)
+    {
+        if(face_collection.faces[face_index].c == face_collection.colors[volume_selected])
+        {
+            face_collection.faces[face_index].c_R = (float)colorR/255;
+            face_collection.faces[face_index].c_G = (float)colorG/255;
+            face_collection.faces[face_index].c_B = (float)colorB/255;
+        }
+    }
 }
 
 std::vector<float> GLWidget::get_color_vector(void)
