@@ -17,17 +17,37 @@ ViewerWidget::ViewerWidget() {
   connect(save_file_button, SIGNAL(released()), this, SLOT(saveImage()));
 
   layout->addWidget(gl_widget, 2, 0);
-  layout->addWidget(slider);
-  layout->addWidget(SortingOption);
+  /*Alpha Slider*/
+  layout->addWidget(slider,3,0);
+  slider-> setRange(0,100);
+  slider-> setTickInterval(1);
+  connect(slider, SIGNAL(valueChanged(int)), this, SLOT(alphaSlide(int)));
+
+  /*Sorting option*/
+  layout->addWidget(SortingOption,4,0);
   SortingOption->addItem("Sorting ON");
   SortingOption->addItem("Sorting OFF");
   connect(SortingOption, SIGNAL(currentIndexChanged(int)), this, SLOT(SortingChanged(int)));
 
+  /*Volume Color option*/
+  layout->addWidget(gl_widget, 5, 0);
   layout->addWidget(ColorChange);
+  connect(ColorChange, SIGNAL(currentIndexChanged(int)), this, SLOT(ColorChanged(int)));
 
-  slider-> setRange(0,100);
+  layout->addWidget(slider_R);
+  slider-> setRange(0,255);
   slider-> setTickInterval(1);
-  connect(slider, SIGNAL(valueChanged(int)), this, SLOT(alphaSlide(int)));
+  connect(slider_R, SIGNAL(valueChanged(int)), this, SLOT(update_slider_R(int)));
+
+  layout->addWidget(slider_G);
+  slider-> setRange(0,255);
+  slider-> setTickInterval(1);
+  connect(slider_G, SIGNAL(valueChanged(int)), this, SLOT(update_slider_G(int)));
+
+  layout->addWidget(slider_B);
+  slider-> setRange(0,255);
+  slider-> setTickInterval(1);
+  connect(slider_B, SIGNAL(valueChanged(int)), this, SLOT(update_slider_B(int)));
 }
 
 void ViewerWidget::reload_buttons(void)
@@ -54,6 +74,7 @@ void ViewerWidget::saveImage() {
 }
 
 void ViewerWidget::alphaSlide(int alpha){
+    std::cout<<"test"<<std::endl;
     gl_widget-> getAlpha(alpha);
     gl_widget-> update();
 }
@@ -61,4 +82,32 @@ void ViewerWidget::alphaSlide(int alpha){
 void ViewerWidget::SortingChanged(int index){
     gl_widget-> get_sorting_index(index);
     gl_widget-> update();
+}
+
+void ViewerWidget::ColorChanged(int index)
+{
+    gl_widget->select_volume(index);
+    gl_widget-> update();
+}
+
+void ViewerWidget::update_slider_R(int R)
+{
+    sliderR = R;
+    gl_widget ->update_volume_color(sliderR,sliderG,sliderB);
+    gl_widget-> update();
+
+}
+void ViewerWidget::update_slider_G(int G)
+{
+    sliderG = G;
+    gl_widget ->update_volume_color(sliderR,sliderG,sliderB);
+    gl_widget-> update();
+
+}
+void ViewerWidget::update_slider_B(int B)
+{
+    sliderB = B;
+    gl_widget ->update_volume_color(sliderR,sliderG,sliderB);
+    gl_widget-> update();
+
 }

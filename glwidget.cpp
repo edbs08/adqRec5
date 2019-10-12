@@ -196,7 +196,9 @@ void GLWidget::paintGL() {
 
       glBegin(face_collection.type);
 
-
+      float cR = 0;
+      float cG = 0;
+      float cB = 0;
       for (int face_index=0;face_index<face_collection.faces.size();face_index++)
       {
           Face face;
@@ -209,8 +211,16 @@ void GLWidget::paintGL() {
                face = face_collection.faces[face_index];
           }
 
-          float color = face.c;//face_index/(float)face_collection.faces.size() - 0.1;//face.c;//float)// //
-          glColor4f(color, color, color, _alphaNew);
+          cR = face.c;
+          cG = face.c;
+          cB = face.c;
+          if(face.c == face_collection.colors[volume_selected])
+          {
+              cR = (float)colorR/255;
+              cG = (float)colorG/255;
+              cB = (float)colorB/255;
+          }
+          glColor4f(cR, cG, cB, _alphaNew);
           for(int vertex_index = 0;vertex_index<face.vertices.size();vertex_index++)
           {
               glVertex3f( face.vertices[vertex_index].x(), face.vertices[vertex_index].y(), face.vertices[vertex_index].z());
@@ -266,9 +276,24 @@ void GLWidget::get_sorting_index(int index)
     sorting = index;
 }
 
+void GLWidget::select_volume(int index)
+{
+    cout<<"select changed "<< index<<endl;
+    volume_selected = index;
+}
+
+void GLWidget::update_volume_color(int R, int G, int B)
+{
+    cout<<"color R "<<R<<endl;
+    cout<<"color G "<<G<<endl;
+    cout<<"color B "<<B<<endl;
+    colorR = R;
+    colorG = G;
+    colorB = B;
+}
+
 std::vector<float> GLWidget::get_color_vector(void)
 {
-
     return face_collection.colors;
 }
 

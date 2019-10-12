@@ -18,6 +18,7 @@ public:
     static const int SORTING_OFF = 1;
     float _alphaNew = 1;
     int sorting = 0;
+    int volume_selected = 0;
 
     float rotation_angle=0;
 
@@ -37,7 +38,13 @@ public:
   void getAlpha(int);
   void getFrameBuffer(QString file);
   void get_sorting_index(int index);
+
+  void select_volume(int index);
   std::vector<float> get_color_vector(void);
+  void update_volume_color(int R, int G, int B);
+  int colorR = 0;
+  int colorG = 0;
+  int colorB = 0;
 
   int counter = 0;
   bool first_paint = true;

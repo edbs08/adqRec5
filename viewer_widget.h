@@ -19,10 +19,14 @@ public:
   GLWidget *gl_widget;
 
   QSlider *slider = new QSlider(Qt::Horizontal);
-
   QComboBox * SortingOption = new QComboBox();
-
   QComboBox * ColorChange = new QComboBox();
+  QSlider *slider_R = new QSlider(Qt::Horizontal);
+  QSlider *slider_G = new QSlider(Qt::Horizontal);
+  QSlider *slider_B = new QSlider(Qt::Horizontal);
+  int sliderR = 0;
+  int sliderG = 0;
+  int sliderB = 0;
 
   void reload_buttons(void);
 
@@ -31,4 +35,8 @@ public slots:
   void loadFile();
   void saveImage();
   void SortingChanged(int);
+  void ColorChanged(int index);
+  void update_slider_R(int R);
+  void update_slider_G(int G);
+  void update_slider_B(int B);
 };
