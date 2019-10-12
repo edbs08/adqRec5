@@ -20,7 +20,7 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_ViewerWidget_t {
     QByteArrayData data[6];
-    char stringdata0[67];
+    char stringdata0[59];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -34,11 +34,11 @@ QT_MOC_LITERAL(1, 13, 10), // "alphaSlide"
 QT_MOC_LITERAL(2, 24, 0), // ""
 QT_MOC_LITERAL(3, 25, 8), // "loadFile"
 QT_MOC_LITERAL(4, 34, 9), // "saveImage"
-QT_MOC_LITERAL(5, 44, 22) // "boxCurrentIndexChanged"
+QT_MOC_LITERAL(5, 44, 14) // "SortingChanged"
 
     },
     "ViewerWidget\0alphaSlide\0\0loadFile\0"
-    "saveImage\0boxCurrentIndexChanged"
+    "saveImage\0SortingChanged"
 };
 #undef QT_MOC_LITERAL
 
@@ -79,7 +79,7 @@ void ViewerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 0: _t->alphaSlide((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 1: _t->loadFile(); break;
         case 2: _t->saveImage(); break;
-        case 3: _t->boxCurrentIndexChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 3: _t->SortingChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     }

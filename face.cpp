@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include "pgm3d.h"
+#include <algorithm>
 
 QJsonArray vectorToJson(const QVector3D &vector) {
   QJsonArray result;
@@ -54,6 +55,7 @@ FaceCollection::FaceCollection()
 }
 using namespace std;
 void FaceCollection::fromJson(const QJsonArray &json) {
+    std::cout<<"fromJson"<<endl;
     type = GL_QUADS;
     faces.clear();
     for (const QJsonValue &face : json) {
@@ -61,7 +63,7 @@ void FaceCollection::fromJson(const QJsonArray &json) {
         new_face.fromJson(face.toObject());
         faces.push_back(new_face);
     }
-    update_init_scale();
+    analyze_loaded_object();
 }
 
 void FaceCollection::fromStl(const QString &path)
@@ -103,7 +105,7 @@ void FaceCollection::fromStl(const QString &path)
         stlFile >> ignore >> ignore; // endloop // endfacet
         faces.push_back(new_face);
     }
-    update_init_scale();
+    analyze_loaded_object();
 }
 
 void FaceCollection::frompgm3D(const QString &path) {
@@ -156,18 +158,25 @@ void FaceCollection::frompgm3D(const QString &path) {
 
 
   model3D.get_all_faces(faces);
-  update_init_scale();
+  analyze_loaded_object();
 
 }
 
 
-void FaceCollection::update_init_scale(void)
+void FaceCollection::analyze_loaded_object(void)
 {
     init_scale = 1;
-
     float max_value = 0;
     for (int face_index=0;face_index<faces.size();face_index++)
     {
+        /*Analysis for the colors and shapes*/
+        faces[face_index].c_temp = faces[face_index].c;
+        if (std::find(colors.begin(), colors.end(),faces[face_index].c)==colors.end())
+        {
+            cout<<"found new color "<<faces[face_index].c<<endl;
+            colors.push_back(faces[face_index].c);
+        }
+        /*Analysis for the initial zoom*/
         for(int vertex_index = 0;vertex_index<faces[face_index].vertices.size();vertex_index++)
         {
             if(max_value < abs(faces[face_index].vertices[vertex_index].x()))
@@ -177,7 +186,11 @@ void FaceCollection::update_init_scale(void)
         }
     }
     init_scale = (1/max_value)*0.8f;
+    std::cout<<"number of colors"<<colors.size()<<std::endl;
 }
+
+
+
 void FaceCollection::fromObj(const QString &path) {
 
     faces.clear();
@@ -318,6 +331,6 @@ void FaceCollection::fromObj(const QString &path) {
         }
 
     }
-    update_init_scale();
+    analyze_loaded_object();
 
 }

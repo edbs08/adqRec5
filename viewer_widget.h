@@ -20,13 +20,15 @@ public:
 
   QSlider *slider = new QSlider(Qt::Horizontal);
 
-  QComboBox * Box = new QComboBox();
-  QAction * firstAction;
-  QAction * secondAction;
+  QComboBox * SortingOption = new QComboBox();
+
+  QComboBox * ColorChange = new QComboBox();
+
+  void reload_buttons(void);
 
 public slots:
   void alphaSlide(int);
   void loadFile();
   void saveImage();
-  void boxCurrentIndexChanged(int);
+  void SortingChanged(int);
 };

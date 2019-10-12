@@ -37,6 +37,8 @@ public:
   void getAlpha(int);
   void getFrameBuffer(QString file);
   void get_sorting_index(int index);
+  std::vector<float> get_color_vector(void);
+
   int counter = 0;
   bool first_paint = true;
   std::string getFileExt(const QString& s);

@@ -266,6 +266,12 @@ void GLWidget::get_sorting_index(int index)
     sorting = index;
 }
 
+std::vector<float> GLWidget::get_color_vector(void)
+{
+
+    return face_collection.colors;
+}
+
 void GLWidget::mouseMoveEvent(QMouseEvent *event) {
   // TODO:
   // - Capture mouse motions

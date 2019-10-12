@@ -9,7 +9,7 @@ ViewerWidget::ViewerWidget() {
   save_file_button = new QPushButton("Save Image");
 
   gl_widget = new GLWidget(this);
-  //firstAction->setText("first action");
+
   layout->addWidget(load_file_button, 0, 0);
   connect(load_file_button, SIGNAL(released()), this, SLOT(loadFile()));
 
@@ -18,19 +18,32 @@ ViewerWidget::ViewerWidget() {
 
   layout->addWidget(gl_widget, 2, 0);
   layout->addWidget(slider);
-  layout->addWidget(Box);
-  Box->addItem("Sorting ON");
-  Box->addItem("Sorting OFF");
-  connect(Box, SIGNAL(currentIndexChanged(int)), this, SLOT(boxCurrentIndexChanged(int)));
+  layout->addWidget(SortingOption);
+  SortingOption->addItem("Sorting ON");
+  SortingOption->addItem("Sorting OFF");
+  connect(SortingOption, SIGNAL(currentIndexChanged(int)), this, SLOT(SortingChanged(int)));
+
+  layout->addWidget(ColorChange);
 
   slider-> setRange(0,100);
   slider-> setTickInterval(1);
   connect(slider, SIGNAL(valueChanged(int)), this, SLOT(alphaSlide(int)));
 }
 
+void ViewerWidget::reload_buttons(void)
+{
+    std::vector<float> colors = gl_widget->get_color_vector();
+    for(uint8_t index = 0;index<colors.size();index++)
+    {
+        QString name = "Volume " + QString::number(index);
+        ColorChange->addItem(name);
+    }
+}
+
 void ViewerWidget::loadFile() {  
   QString file_name= QFileDialog::getOpenFileName(this, ("Open File"),QDir::currentPath(), ("Document files (*.json *.stl *.obj *.pgm3d)"));
   gl_widget->loadFaces(file_name);
+  reload_buttons();
   gl_widget-> update();
 }
 
@@ -45,7 +58,7 @@ void ViewerWidget::alphaSlide(int alpha){
     gl_widget-> update();
 }
 
-void ViewerWidget::boxCurrentIndexChanged(int index){
+void ViewerWidget::SortingChanged(int index){
     gl_widget-> get_sorting_index(index);
     gl_widget-> update();
 }

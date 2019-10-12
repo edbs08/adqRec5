@@ -13,6 +13,7 @@ public:
   std::vector<QVector3D> vertices;
   QVector3D normal;
   float c;
+  float c_temp;
 
   QJsonObject toJson() const;
   void fromJson(const QJsonObject &json);
@@ -23,6 +24,7 @@ public:
     FaceCollection();
     float init_scale = 1;
     std::vector<Face> faces;
+    std::vector<float> colors;
     unsigned int type = GL_TRIANGLES; //default value is TRIANGLES
     bool init;
     void fromJson(const QJsonArray &json);
@@ -30,5 +32,7 @@ public:
     void frompgm3D(const QString &path);
     void fromObj(const QString &path);
 
+    void analyze_loaded_object(void);
     void update_init_scale(void);
+
 };
