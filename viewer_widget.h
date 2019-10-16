@@ -29,6 +29,7 @@ public:
   int sliderG = 0;
   int sliderB = 0;
   QPushButton *save_color;
+  QPushButton *reset_colors;
 
   void reload_buttons(void);
 
@@ -42,4 +43,5 @@ public slots:
   void update_slider_G(int G);
   void update_slider_B(int B);
   void saveColor(void);
+  void resetColors(void);
 };

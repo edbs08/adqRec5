@@ -9,6 +9,7 @@ ViewerWidget::ViewerWidget() {
   load_file_button = new QPushButton("Load file");
   save_file_button = new QPushButton("Save Image");
   save_color = new QPushButton("Save Color for Volume");
+  reset_colors = new QPushButton("Reset Colors");
   gl_widget = new GLWidget(this);
 
   /*Load file*/
@@ -65,7 +66,8 @@ ViewerWidget::ViewerWidget() {
   layout->addWidget(save_color,9,1);
   connect(save_color, SIGNAL(released()), this, SLOT(saveColor()));
 
-
+  layout->addWidget(reset_colors,10,1);
+  connect(reset_colors, SIGNAL(released()), this, SLOT(resetColors()));
 }
 
 void ViewerWidget::reload_buttons(void)
@@ -141,7 +143,15 @@ void ViewerWidget::update_slider_B(int B)
 
 void ViewerWidget::saveColor(void)
 {
-    cout<<"save color"<<endl;
+    cout<<"save color for volume"<<endl;
     gl_widget ->save_color_volume();
+    gl_widget-> update();
+}
+
+void ViewerWidget::resetColors(void)
+{
+    cout<<"Reset colors"<<endl;
+    gl_widget->reset_colors();
+    ColorChange->setCurrentIndex(0);
     gl_widget-> update();
 }

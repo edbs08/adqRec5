@@ -284,9 +284,11 @@ void GLWidget::select_volume(int index)
 
 void GLWidget::update_volume_color(int R, int G, int B)
 {
+    /*
     cout<<"color R "<<R<<endl;
     cout<<"color G "<<G<<endl;
     cout<<"color B "<<B<<endl;
+    */
     colorR = R;
     colorG = G;
     colorB = B;
@@ -302,6 +304,16 @@ void GLWidget::save_color_volume(void)
             face_collection.faces[face_index].c_G = (float)colorG/255;
             face_collection.faces[face_index].c_B = (float)colorB/255;
         }
+    }
+}
+
+void GLWidget::reset_colors(void)
+{
+    for (int face_index=0;face_index<face_collection.faces.size();face_index++)
+    {
+            face_collection.faces[face_index].c_R = face_collection.faces[face_index].c;
+            face_collection.faces[face_index].c_G = face_collection.faces[face_index].c;
+            face_collection.faces[face_index].c_B = face_collection.faces[face_index].c;
     }
 }
 
