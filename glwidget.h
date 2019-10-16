@@ -23,6 +23,7 @@ public:
     float rotation_angle=0;
 
     float speed_factor = 1;
+    bool auto_rotation = false;
     QPointF translation=QPoint(0.0f,0.0f);
     QPointF rotation=QPoint(1.0f,0.0f);
 

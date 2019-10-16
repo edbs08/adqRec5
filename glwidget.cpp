@@ -154,7 +154,18 @@ void GLWidget::paintGL() {
         glLoadIdentity();
         /*Rotation*/
         glRotatef(rotation_angle,rotation.y(),rotation.x(),0.0f);
-        rotation_angle = 0;
+        //rotation_angle = 0;
+        if(auto_rotation == true)
+        {
+            rotation_angle = 1;
+            rotation.ry() = 0;
+            rotation.rx() = 1;
+            QWidget::update();
+        }
+        else
+        {
+            rotation_angle = 0;
+        }
         /*Translation*/
         glTranslatef(translation.x(),translation.y(),0.0f);
         translation.rx()=0;
@@ -408,4 +419,11 @@ void GLWidget::keyReleaseEvent(QKeyEvent *event)
     {
         speed_factor = 1;
     }
+
+    if(event->key() == Qt::Key::Key_R)
+    {
+        auto_rotation = !auto_rotation;
+        cout<< "auto_rotate to "<<auto_rotation<<endl;
+    }
+    QWidget::update();
 }
