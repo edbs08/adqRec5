@@ -11,46 +11,58 @@ ViewerWidget::ViewerWidget() {
   save_color = new QPushButton("Save Color for Volume");
   gl_widget = new GLWidget(this);
 
+  /*Load file*/
   layout->addWidget(load_file_button, 0, 0);
   connect(load_file_button, SIGNAL(released()), this, SLOT(loadFile()));
 
+  /*Save image*/
   layout->addWidget(save_file_button, 1, 0);
   connect(save_file_button, SIGNAL(released()), this, SLOT(saveImage()));
 
-  layout->addWidget(gl_widget, 2, 0);
+  int widget_size = 15;
+  /*Widget*/
+  layout->addWidget(gl_widget,2,0,widget_size,1);
+
   /*Alpha Slider*/
-  layout->addWidget(slider,3,0);
+  QLabel* minimumLabel = new QLabel(tr("Transparency"));
+  layout->addWidget(minimumLabel);
+  layout->addWidget(slider,widget_size+3,0);
   slider-> setRange(0,100);
   slider-> setTickInterval(1);
   connect(slider, SIGNAL(valueChanged(int)), this, SLOT(alphaSlide(int)));
 
   /*Sorting option*/
-  layout->addWidget(SortingOption,4,0);
+  layout->addWidget(SortingOption,widget_size+4,0);
   SortingOption->addItem("Sorting ON");
   SortingOption->addItem("Sorting OFF");
   connect(SortingOption, SIGNAL(currentIndexChanged(int)), this, SLOT(SortingChanged(int)));
 
   /*Volume Color option*/
-  layout->addWidget(gl_widget, 5, 0);
-  layout->addWidget(ColorChange);
+  layout->addWidget(ColorChange, 2,1);
   connect(ColorChange, SIGNAL(currentIndexChanged(int)), this, SLOT(ColorChanged(int)));
 
-  layout->addWidget(slider_R);
+  QLabel* Red = new QLabel(tr("R"));
+  layout->addWidget(Red,3,1);
+  layout->addWidget(slider_R,4,1);
   slider-> setRange(0,255);
   slider-> setTickInterval(1);
   connect(slider_R, SIGNAL(valueChanged(int)), this, SLOT(update_slider_R(int)));
 
-  layout->addWidget(slider_G);
+  QLabel* Green = new QLabel(tr("G"));
+  layout->addWidget(Green,5,1);
+  layout->addWidget(slider_G,6,1);
   slider-> setRange(0,255);
   slider-> setTickInterval(1);
   connect(slider_G, SIGNAL(valueChanged(int)), this, SLOT(update_slider_G(int)));
 
-  layout->addWidget(slider_B);
+  QLabel* Blue = new QLabel(tr("B"));
+  layout->addWidget(Blue,7,1);
+  layout->addWidget(slider_B,8,1);
   slider-> setRange(0,255);
   slider-> setTickInterval(1);
   connect(slider_B, SIGNAL(valueChanged(int)), this, SLOT(update_slider_B(int)));
 
-  layout->addWidget(save_color);
+  layout->addWidget(save_color,9,1);
   connect(save_color, SIGNAL(released()), this, SLOT(saveColor()));
 
 
@@ -61,7 +73,16 @@ void ViewerWidget::reload_buttons(void)
     std::vector<float> colors = gl_widget->get_color_vector();
     for(uint8_t index = 0;index<colors.size();index++)
     {
-        QString name = "Volume " + QString::number(index);
+        QString name;
+        if(index == 0)
+        {
+            name = "No volume selected";
+        }
+        else
+        {
+            name = "Volume " + QString::number(index);
+        }
+
         ColorChange->addItem(name);
     }
 }

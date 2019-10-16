@@ -4,6 +4,7 @@
 #include <QPushButton>
 #include <QSlider>
 #include <QComboBox>
+#include <QLabel>
 
 #include "glwidget.h"
 

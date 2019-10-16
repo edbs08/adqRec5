@@ -167,6 +167,7 @@ void FaceCollection::analyze_loaded_object(void)
 {
     init_scale = 1;
     float max_value = 0;
+    colors.push_back(-1); //Color not selected
     for (int face_index=0;face_index<faces.size();face_index++)
     {
         /*Analysis for the colors and shapes*/
