@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_ViewerWidget_t {
-    QByteArrayData data[16];
-    char stringdata0[154];
+    QByteArrayData data[19];
+    char stringdata0[183];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -44,13 +44,17 @@ QT_MOC_LITERAL(11, 112, 1), // "G"
 QT_MOC_LITERAL(12, 114, 15), // "update_slider_B"
 QT_MOC_LITERAL(13, 130, 1), // "B"
 QT_MOC_LITERAL(14, 132, 9), // "saveColor"
-QT_MOC_LITERAL(15, 142, 11) // "resetColors"
+QT_MOC_LITERAL(15, 142, 11), // "resetColors"
+QT_MOC_LITERAL(16, 154, 11), // "getEdgeBool"
+QT_MOC_LITERAL(17, 166, 4), // "draw"
+QT_MOC_LITERAL(18, 171, 11) // "cutBoxIndex"
 
     },
     "ViewerWidget\0alphaSlide\0\0loadFile\0"
     "saveImage\0SortingChanged\0ColorChanged\0"
     "index\0update_slider_R\0R\0update_slider_G\0"
-    "G\0update_slider_B\0B\0saveColor\0resetColors"
+    "G\0update_slider_B\0B\0saveColor\0resetColors\0"
+    "getEdgeBool\0draw\0cutBoxIndex"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,7 +64,7 @@ static const uint qt_meta_data_ViewerWidget[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      10,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -68,16 +72,18 @@ static const uint qt_meta_data_ViewerWidget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   64,    2, 0x0a /* Public */,
-       3,    0,   67,    2, 0x0a /* Public */,
-       4,    0,   68,    2, 0x0a /* Public */,
-       5,    1,   69,    2, 0x0a /* Public */,
-       6,    1,   72,    2, 0x0a /* Public */,
-       8,    1,   75,    2, 0x0a /* Public */,
-      10,    1,   78,    2, 0x0a /* Public */,
-      12,    1,   81,    2, 0x0a /* Public */,
-      14,    0,   84,    2, 0x0a /* Public */,
-      15,    0,   85,    2, 0x0a /* Public */,
+       1,    1,   74,    2, 0x0a /* Public */,
+       3,    0,   77,    2, 0x0a /* Public */,
+       4,    0,   78,    2, 0x0a /* Public */,
+       5,    1,   79,    2, 0x0a /* Public */,
+       6,    1,   82,    2, 0x0a /* Public */,
+       8,    1,   85,    2, 0x0a /* Public */,
+      10,    1,   88,    2, 0x0a /* Public */,
+      12,    1,   91,    2, 0x0a /* Public */,
+      14,    0,   94,    2, 0x0a /* Public */,
+      15,    0,   95,    2, 0x0a /* Public */,
+      16,    1,   96,    2, 0x0a /* Public */,
+      18,    1,   99,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Int,    2,
@@ -90,6 +96,8 @@ static const uint qt_meta_data_ViewerWidget[] = {
     QMetaType::Void, QMetaType::Int,   13,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Bool,   17,
+    QMetaType::Void, QMetaType::Int,    7,
 
        0        // eod
 };
@@ -110,6 +118,8 @@ void ViewerWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 7: _t->update_slider_B((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 8: _t->saveColor(); break;
         case 9: _t->resetColors(); break;
+        case 10: _t->getEdgeBool((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 11: _t->cutBoxIndex((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -140,13 +150,13 @@ int ViewerWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 12;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 10)
+        if (_id < 12)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 10;
+        _id -= 12;
     }
     return _id;
 }

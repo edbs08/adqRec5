@@ -5,7 +5,7 @@
 #include <QSlider>
 #include <QComboBox>
 #include <QLabel>
-
+#include<QCheckBox>
 #include "glwidget.h"
 
 class ViewerWidget : public QWidget {
@@ -22,6 +22,7 @@ public:
   QSlider *slider = new QSlider(Qt::Horizontal);
   QComboBox * SortingOption = new QComboBox();
   QComboBox * ColorChange = new QComboBox();
+  QComboBox * cutBox = new QComboBox();
   QSlider *slider_R = new QSlider(Qt::Horizontal);
   QSlider *slider_G = new QSlider(Qt::Horizontal);
   QSlider *slider_B = new QSlider(Qt::Horizontal);
@@ -30,6 +31,7 @@ public:
   int sliderB = 0;
   QPushButton *save_color;
   QPushButton *reset_colors;
+  QCheckBox *checkbox;
 
   void reload_buttons(void);
 
@@ -44,4 +46,6 @@ public slots:
   void update_slider_B(int B);
   void saveColor(void);
   void resetColors(void);
+  void getEdgeBool(bool draw);
+  void cutBoxIndex(int index);
 };

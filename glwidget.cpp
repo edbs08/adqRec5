@@ -121,6 +121,7 @@ void GLWidget::initializeGL() {
 }
 
 void GLWidget::paintGL() {
+    makeCurrent();
     QSize viewport_size = size();
     glViewport(0, 0, viewport_size.width(), viewport_size.height());
     float ar = (float) viewport_size.width() / (float) viewport_size.height();
@@ -201,10 +202,49 @@ void GLWidget::paintGL() {
   }
   if(face_collection.init==true)
   {
+      glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       glBlendEquation(GL_FUNC_ADD);
 
+      doClip(cut);
+
+      if(draw_edges == true){
+          glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+          glBegin(face_collection.type);
+
+          for (int face_index=0;face_index<face_collection.faces.size();face_index++)
+          {
+              Face face;
+              if(sorting== SORTING_ON)
+              {
+                  face = face_collection.faces[vp[face_index].second];
+              }
+              else
+              {
+                  face = face_collection.faces[face_index];
+              }
+              float color = face.c;//face_index/(float)face_collection.faces.size() - 0.1;//face.c;//float)// //
+              if(face.c < 0.5){
+                  color+=0.1;
+              }
+              else{
+                  color-=0.1;
+              }
+              glColor4f(color, color, color, _alphaNew);
+              for(int vertex_index = 0;vertex_index<face.vertices.size();vertex_index++)
+              {
+                  glVertex3f( face.vertices[vertex_index].x(), face.vertices[vertex_index].y(), face.vertices[vertex_index].z());
+                  if(face.vertices[vertex_index].x()>max_value)
+                  {
+                      max_value = face.vertices[vertex_index].x();
+                  }
+              }
+          }
+          glEnd();
+      }
+
+      glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
       glBegin(face_collection.type);
 
       float cR = 0;
@@ -215,11 +255,11 @@ void GLWidget::paintGL() {
           Face face;
           if(sorting== SORTING_ON)
           {
-               face = face_collection.faces[vp[face_index].second];
+              face = face_collection.faces[vp[face_index].second];
           }
           else
           {
-               face = face_collection.faces[face_index];
+              face = face_collection.faces[face_index];
           }
 
           cR = face.c_R;
@@ -241,8 +281,8 @@ void GLWidget::paintGL() {
               }
           }
       }
-       glEnd();
-       glDisable(GL_BLEND);
+      glEnd();
+      glDisable(GL_BLEND);
 
   }
 }
@@ -268,6 +308,58 @@ QVector3D GLWidget::object2view(Face face, GLfloat *model){
     view_coords.setZ(view_vec.z()/view_vec.w());
 
     return view_coords;
+
+}
+
+void GLWidget::drawEdges(bool draw){
+       draw_edges = draw;
+}
+
+void GLWidget::getCutIndex(int index){
+       cut = index;
+}
+
+void GLWidget::doClip(int index){
+
+    // clipping planes
+    GLdouble eqn1[4] = { 1.0, 0.0, 0.0, 0.0};
+    GLdouble eqn2[4] = { 0.0, 1.0, 0.0, 0.0 };
+    GLdouble eqn3[4] = { 0.0, 0.0, 1.0, 0.0 };
+    GLdouble eqn4[4] = { -1.0, 0.0, 0.0, 0.0};
+    GLdouble eqn5[4] = { 0.0, -1.0, 0.0, 0.0 };
+    GLdouble eqn6[4] = { 0.0, 0.0, -1.0, 0.0 };
+
+    glDisable(GL_CLIP_PLANE0);
+    glDisable(GL_CLIP_PLANE1);
+    glDisable(GL_CLIP_PLANE2);
+    glDisable(GL_CLIP_PLANE3);
+    glDisable(GL_CLIP_PLANE4);
+    glDisable(GL_CLIP_PLANE5);
+
+    if(index == X_CUT){
+            glClipPlane( GL_CLIP_PLANE0, eqn1 );
+            glEnable(GL_CLIP_PLANE0);
+    }
+    else if(index == Y_CUT){
+        glClipPlane( GL_CLIP_PLANE1, eqn2 );
+        glEnable(GL_CLIP_PLANE1);
+    }
+    else if(index == Z_CUT){
+        glClipPlane( GL_CLIP_PLANE2, eqn3 );
+        glEnable(GL_CLIP_PLANE2);
+    }
+    else if(index == NEG_X_CUT){
+        glClipPlane( GL_CLIP_PLANE3, eqn4);
+        glEnable(GL_CLIP_PLANE3);
+    }
+    else if(index == NEG_Y_CUT){
+        glClipPlane( GL_CLIP_PLANE4, eqn5);
+        glEnable(GL_CLIP_PLANE4);
+    }
+    else if(index == NEG_Z_CUT){
+        glClipPlane( GL_CLIP_PLANE5, eqn6);
+        glEnable(GL_CLIP_PLANE5);
+    }
 
 }
 

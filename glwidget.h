@@ -16,14 +16,24 @@ public:
   Q_OBJECT
     static const int SORTING_ON = 0;
     static const int SORTING_OFF = 1;
-    float _alphaNew = 1;
+    static const int NO_CUT = 0;
+    static const int X_CUT = 1;
+    static const int NEG_X_CUT = 2;
+    static const int Y_CUT = 3;
+    static const int NEG_Y_CUT = 4;
+    static const int Z_CUT = 5;
+    static const int NEG_Z_CUT = 6;
+
     int sorting = 0;
     int volume_selected = 0;
+    int cut = 0;
 
     float rotation_angle=0;
-
+    float _alphaNew = 1;
     float speed_factor = 1;
+    bool draw_edges = false;
     bool auto_rotation = false;
+
     QPointF translation=QPoint(0.0f,0.0f);
     QPointF rotation=QPoint(1.0f,0.0f);
 
@@ -39,6 +49,9 @@ public:
   void getAlpha(int);
   void getFrameBuffer(QString file);
   void get_sorting_index(int index);
+  void drawEdges(bool draw);
+  void getCutIndex(int index);
+  void doClip(int index);
 
   void select_volume(int index);
   std::vector<float> get_color_vector(void);

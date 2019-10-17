@@ -11,6 +11,7 @@ ViewerWidget::ViewerWidget() {
   save_color = new QPushButton("Save Color for Volume");
   reset_colors = new QPushButton("Reset Colors");
   gl_widget = new GLWidget(this);
+  checkbox = new QCheckBox("Draw Edges", this);
 
   /*Load file*/
   layout->addWidget(load_file_button, 0, 0);
@@ -68,6 +69,23 @@ ViewerWidget::ViewerWidget() {
 
   layout->addWidget(reset_colors,10,1);
   connect(reset_colors, SIGNAL(released()), this, SLOT(resetColors()));
+
+  /*Draw Edges option*/
+  layout->addWidget(checkbox, widget_size+5, 0);
+  connect(checkbox, SIGNAL(clicked(bool)), this, SLOT(getEdgeBool(bool)));
+
+  /*Cutting View Option*/
+  layout->addWidget(cutBox,widget_size+6,0);
+  cutBox->addItem("No Cut");
+  cutBox->addItem("X_Cut");
+  cutBox->addItem("NEG_X_Cut");
+  cutBox->addItem("Y_Cut");
+  cutBox->addItem("NEG_Y_Cut");
+  cutBox->addItem("Z_Cut");
+  cutBox->addItem("NEG_Z_Cut");
+  connect(cutBox, SIGNAL(currentIndexChanged(int)), this, SLOT(cutBoxIndex(int)));
+
+
 }
 
 void ViewerWidget::reload_buttons(void)
@@ -103,7 +121,6 @@ void ViewerWidget::saveImage() {
 }
 
 void ViewerWidget::alphaSlide(int alpha){
-    std::cout<<"test"<<std::endl;
     gl_widget-> getAlpha(alpha);
     gl_widget-> update();
 }
@@ -154,4 +171,14 @@ void ViewerWidget::resetColors(void)
     gl_widget->reset_colors();
     ColorChange->setCurrentIndex(0);
     gl_widget-> update();
+}
+
+void ViewerWidget::cutBoxIndex(int index){
+    gl_widget-> getCutIndex(index);
+    gl_widget-> update();
+}
+
+void ViewerWidget::getEdgeBool(bool draw){
+    gl_widget -> drawEdges(draw);
+    gl_widget -> update();
 }
