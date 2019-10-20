@@ -23,8 +23,10 @@ int main(int argc, char **argv) {
 
   ViewerWidget viewer_widget;
   if (argc == 2)
-    viewer_widget.gl_widget->loadFaces(argv[1]);
-    viewer_widget.reload_buttons();
+  {
+      viewer_widget.gl_widget->loadFaces(argv[1]);
+      viewer_widget.reload_buttons();
+  }
   viewer_widget.show();
   return app.exec();
 }

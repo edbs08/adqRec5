@@ -31,7 +31,6 @@ void GLWidget::loadFaces(const QString &path) {
         QByteArray json_data = json_file.readAll();
         QJsonDocument json_document(QJsonDocument::fromJson(json_data));
         face_collection.fromJson(json_document.array());
-
         face_collection.init=true;
 
     }
@@ -44,10 +43,7 @@ void GLWidget::loadFaces(const QString &path) {
             exit(-1);
         }
         face_collection.fromStl(path);
-
         face_collection.init=true;
-
-
     }
 
     else if(file_type == "pgm3d")
@@ -75,10 +71,8 @@ void GLWidget::loadFaces(const QString &path) {
     else{
         std::cerr << "Invalid file type";
     }
-
     zoomScale = face_collection.init_scale;
     initializeGL();
-
 }
 
 string GLWidget::getFileExt(const QString& qs) {
@@ -88,7 +82,6 @@ string GLWidget::getFileExt(const QString& qs) {
    if (i != string::npos) {
       return(s.substr(i+1, s.length() - i));
    }
-
    return("");
 }
 
@@ -96,7 +89,6 @@ void GLWidget::clear_variables(void)
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     zoomScale = 1;
@@ -115,8 +107,6 @@ void GLWidget::initializeGL() {
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-
-
     glDisable(GL_LIGHTING );
 }
 
@@ -127,11 +117,11 @@ void GLWidget::paintGL() {
     float ar = (float) viewport_size.width() / (float) viewport_size.height();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
-    /*
-   *  Config Projection Matrix  GL_PROJECTION
-   */
+
+    /*Config Projection Matrix  GL_PROJECTION*/
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();                 // Reset the model-view matrix
+    /*Code for the aspect ratio*/
     if(viewport_size.width() <= viewport_size.height()){
         glOrtho(-1.0, 1.0, -1 / ar, 1.0 / ar, 1.0, -1.0);
     }
@@ -139,9 +129,7 @@ void GLWidget::paintGL() {
         glOrtho(-1.0 *ar, 1.0 *ar, -1.0, 1.0, 1.0, -1.0);
     }
 
-    /*
-   *  Config Model View Matrix  GL_MODELVIEW
-   */
+    /*Config Model View Matrix  GL_MODELVIEW*/
     if (true == first_paint)
     {
         glMatrixMode(GL_MODELVIEW);
@@ -155,7 +143,6 @@ void GLWidget::paintGL() {
         glLoadIdentity();
         /*Rotation*/
         glRotatef(rotation_angle,rotation.y(),rotation.x(),0.0f);
-        //rotation_angle = 0;
         if(auto_rotation == true)
         {
             rotation_angle = 1;
@@ -183,7 +170,6 @@ void GLWidget::paintGL() {
 
   //*********** Draw the model//
   // Define vertices in counter-clockwise (CCW) order with normal pointing out
-
   QVector3D view_coords;
   vector<pair<float, int>> vp;
   double max_value = 0;
@@ -381,17 +367,11 @@ void GLWidget::get_sorting_index(int index)
 
 void GLWidget::select_volume(int index)
 {
-    cout<<"select changed "<< index<<endl;
     volume_selected = index;
 }
 
 void GLWidget::update_volume_color(int R, int G, int B)
 {
-    /*
-    cout<<"color R "<<R<<endl;
-    cout<<"color G "<<G<<endl;
-    cout<<"color B "<<B<<endl;
-    */
     colorR = R;
     colorG = G;
     colorB = B;
@@ -440,25 +420,20 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
         {
 
             displace.setX(1);
-            //translation.rx()+=0.01;
         }
         if((mouse_pos.x()-old_point_t.x()) < 0)
         {
 
             displace.setX(-1);
-            //translation.rx()-=0.01;
         }
 
         if((mouse_pos.y()-old_point_t.y()) > 0)
         {
             displace.setY(-1);
-            //translation.ry()-=0.01;
         }
         if((mouse_pos.y()-old_point_t.y()) < 0)
         {
-
             displace.setY(1);
-            //translation.ry()+=0.01;
         }
     }
      /***************************************************/
@@ -468,7 +443,6 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
     {
         rotation.rx()=-displace.x();
         rotation.ry()=displace.y();
-
         rotation_angle = speed_factor*2;
     }
     /* Right button = Translation*/
@@ -477,24 +451,21 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
         translation.rx()= (pow(speed_factor,1.5)*0.02*displace.x());
         translation.ry()= (pow(speed_factor,1.5)*0.02*displace.y());
     }
-
     /*Update points*/
     old_point_t.setX(mouse_pos.x());
     old_point_t.setY(mouse_pos.y());
 
     QWidget::update();
-
 }
 
 void GLWidget::wheelEvent(QWheelEvent *event)
 {
-  // TODO: zoom
     QPoint numDegrees = event->angleDelta();
 
     if (numDegrees.y() < 0)  zoomScale = (-1);
     if (numDegrees.y() > 0)  zoomScale = 1;
     zoomScale = pow((1.1*speed_factor),zoomScale);
-    QWidget::update(); // call paintGL()
+    QWidget::update();
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *event)
@@ -515,7 +486,6 @@ void GLWidget::keyReleaseEvent(QKeyEvent *event)
     if(event->key() == Qt::Key::Key_R)
     {
         auto_rotation = !auto_rotation;
-        cout<< "auto_rotate to "<<auto_rotation<<endl;
     }
     QWidget::update();
 }

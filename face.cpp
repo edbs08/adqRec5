@@ -167,6 +167,7 @@ void FaceCollection::analyze_loaded_object(void)
 {
     init_scale = 1;
     float max_value = 0;
+    colors.clear(); //Clear the color vector
     colors.push_back(-1); //Color not selected
     for (int face_index=0;face_index<faces.size();face_index++)
     {
@@ -176,7 +177,6 @@ void FaceCollection::analyze_loaded_object(void)
         faces[face_index].c_B = faces[face_index].c;
         if (std::find(colors.begin(), colors.end(),faces[face_index].c)==colors.end())
         {
-            cout<<"found new color "<<faces[face_index].c<<endl;
             colors.push_back(faces[face_index].c);
         }
         /*Analysis for the initial zoom*/
@@ -189,20 +189,14 @@ void FaceCollection::analyze_loaded_object(void)
         }
     }
     init_scale = (1/max_value)*0.8f;
-    std::cout<<"number of colors"<<colors.size()<<std::endl;
 }
-
-
 
 void FaceCollection::fromObj(const QString &path) {
 
     faces.clear();
-    //    FILE * objFile = fopen(path.toStdString().c_str(), "r");
     std::ifstream in(path.toStdString().c_str(), std::ios::in);
-
     if(!in) // check if file can be found
     {
-        //MessageBox(0, "OBJ file not found.", 0, 0);
         std::cout<<"OBJ file not found."<<std::endl;
     }
 
@@ -210,7 +204,6 @@ void FaceCollection::fromObj(const QString &path) {
     vector<QVector3D> normal_list;
     float x, y, z;
     std::string line;
-    int i = 0;
     while (std::getline(in, line))
     {
         //check v for vertices
@@ -332,8 +325,6 @@ void FaceCollection::fromObj(const QString &path) {
             }
             faces.push_back(new_face);
         }
-
     }
     analyze_loaded_object();
-
 }

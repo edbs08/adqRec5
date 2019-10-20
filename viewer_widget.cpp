@@ -84,12 +84,11 @@ ViewerWidget::ViewerWidget() {
   cutBox->addItem("Z_Cut");
   cutBox->addItem("NEG_Z_Cut");
   connect(cutBox, SIGNAL(currentIndexChanged(int)), this, SLOT(cutBoxIndex(int)));
-
-
 }
 
 void ViewerWidget::reload_buttons(void)
 {
+    ColorChange->clear();
     std::vector<float> colors = gl_widget->get_color_vector();
     for(uint8_t index = 0;index<colors.size();index++)
     {
@@ -155,19 +154,16 @@ void ViewerWidget::update_slider_B(int B)
     sliderB = B;
     gl_widget ->update_volume_color(sliderR,sliderG,sliderB);
     gl_widget-> update();
-
 }
 
 void ViewerWidget::saveColor(void)
 {
-    cout<<"save color for volume"<<endl;
     gl_widget ->save_color_volume();
     gl_widget-> update();
 }
 
 void ViewerWidget::resetColors(void)
 {
-    cout<<"Reset colors"<<endl;
     gl_widget->reset_colors();
     ColorChange->setCurrentIndex(0);
     gl_widget-> update();
