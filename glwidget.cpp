@@ -5,9 +5,28 @@
 #include <QKeyEvent>
 #include <iostream>
 #include "glwidget.h"
-
+/*
+ * Namespace used
+ */
 using namespace std;
 
+/*
+ * Constant vales
+ */
+static const float INIT_COLOR_BKG_R = 0.6f;
+static const float INIT_COLOR_BKG_G = 0.8f;
+static const float INIT_COLOR_BKG_B = 1.0f;
+
+static const float COLOR_THRESHOLD = 0.5f;
+static const float COLOR_INCREMENT = 0.1f;
+static const int MAX_RGB_VALUE = 255;
+static const float ALPHA_NORMALIZATION = 100.0f;
+static const float SPEED_FAC_ROTATION = 0.02f;
+static const float SPEED_FAC_ROTATION_POW = 1.5f;
+
+/*
+ * Functions and methods definitions
+ */
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent)
 {
      QWidget::setFocusPolicy(Qt::FocusPolicy::StrongFocus);
@@ -15,7 +34,6 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent)
 
 GLWidget::~GLWidget() {
 }
-
 
 void GLWidget::loadFaces(const QString &path) {
     string file_type = getFileExt(path);
@@ -95,8 +113,9 @@ void GLWidget::clear_variables(void)
     first_paint = true;
 
 }
+
 void GLWidget::initializeGL() {
-    glClearColor(0.6f, 0.8f, 1.0f, 1.0f); // Set background color
+    glClearColor(INIT_COLOR_BKG_R, INIT_COLOR_BKG_G, INIT_COLOR_BKG_B, 1.0f); // Set background color
     glClearDepth(1.0f);                   // Set background depth to farthest
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
@@ -210,12 +229,14 @@ void GLWidget::paintGL() {
               {
                   face = face_collection.faces[face_index];
               }
-              float color = face.c;//face_index/(float)face_collection.faces.size() - 0.1;//face.c;//float)// //
-              if(face.c < 0.5){
-                  color+=0.1;
+
+              float color = face.c;
+              if(face.c < COLOR_THRESHOLD){
+
+                  color+=COLOR_INCREMENT;
               }
               else{
-                  color-=0.1;
+                  color-=COLOR_INCREMENT;
               }
               glColor4f(color, color, color, _alphaNew);
               for(int vertex_index = 0;vertex_index<face.vertices.size();vertex_index++)
@@ -253,9 +274,9 @@ void GLWidget::paintGL() {
           cB = face.c_B;
           if(face.c == face_collection.colors[volume_selected])
           {
-              cR = (float)colorR/255;
-              cG = (float)colorG/255;
-              cB = (float)colorB/255;
+              cR = (float)colorR/MAX_RGB_VALUE;
+              cG = (float)colorG/MAX_RGB_VALUE;
+              cB = (float)colorB/MAX_RGB_VALUE;
           }
           glColor4f(cR, cG, cB, _alphaNew);
           for(int vertex_index = 0;vertex_index<face.vertices.size();vertex_index++)
@@ -279,9 +300,9 @@ QVector3D GLWidget::object2view(Face face, GLfloat *model){
     QVector4D center, view_vec;
     QVector3D view_coords;
 
-    center.setX((face.vertices[0].x() + face.vertices[2].x())/2.0);
-    center.setY((face.vertices[0].y() + face.vertices[2].y())/2.0);
-    center.setZ((face.vertices[0].z() + face.vertices[2].z())/2.0);
+    center.setX((face.vertices[0].x() + face.vertices[2].x())/2.0f);
+    center.setY((face.vertices[0].y() + face.vertices[2].y())/2.0f);
+    center.setZ((face.vertices[0].z() + face.vertices[2].z())/2.0f);
     center.setW(1.0);
 
     view_vec.setX(center.x()*model[0] + center.y()*model[4] + center.z()*model[8] + center.w()*model[12]);
@@ -350,7 +371,7 @@ void GLWidget::doClip(int index){
 }
 
 void GLWidget::getAlpha(int alpha){
-    _alphaNew = 1 - ((float)alpha/100.0);
+    _alphaNew = 1 - ((float)alpha/ALPHA_NORMALIZATION);
     paintGL();
 }
 
@@ -383,9 +404,9 @@ void GLWidget::save_color_volume(void)
     {
         if(face_collection.faces[face_index].c == face_collection.colors[volume_selected])
         {
-            face_collection.faces[face_index].c_R = (float)colorR/255;
-            face_collection.faces[face_index].c_G = (float)colorG/255;
-            face_collection.faces[face_index].c_B = (float)colorB/255;
+            face_collection.faces[face_index].c_R = (float)colorR/MAX_RGB_VALUE;
+            face_collection.faces[face_index].c_G = (float)colorG/MAX_RGB_VALUE;
+            face_collection.faces[face_index].c_B = (float)colorB/MAX_RGB_VALUE;
         }
     }
 }
@@ -406,10 +427,6 @@ std::vector<float> GLWidget::get_color_vector(void)
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event) {
-  // TODO:
-  // - Capture mouse motions
-  // - If left click is pressed: rotate
-  // - If right click is pressed: translate
     //get mouse position
     QPoint displace(0,0);
     QPoint mouse_pos = event->pos();
@@ -448,8 +465,8 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
     /* Right button = Translation*/
     if( event->buttons() == Qt::RightButton)
     {
-        translation.rx()= (pow(speed_factor,1.5)*0.02*displace.x());
-        translation.ry()= (pow(speed_factor,1.5)*0.02*displace.y());
+        translation.rx()= (pow(speed_factor,SPEED_FAC_ROTATION_POW)*SPEED_FAC_ROTATION*displace.x());
+        translation.ry()= (pow(speed_factor,SPEED_FAC_ROTATION_POW)*SPEED_FAC_ROTATION*displace.y());
     }
     /*Update points*/
     old_point_t.setX(mouse_pos.x());

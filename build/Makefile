@@ -33,7 +33,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = faces_viewer1.0.0
-DISTDIR = /home/daniel/Documents/Reconstruction/td4/code/build/.tmp/faces_viewer1.0.0
+DISTDIR = /home/daniel/Documents/Reconstruction/td5/code/build/.tmp/faces_viewer1.0.0
 LINK          = g++
 LFLAGS        = -m64 -Wl,-O1
 LIBS          = $(SUBLIBS) -L/usr/X11R6/lib64 -lQt5OpenGL -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
@@ -117,7 +117,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../../faces_viewer.pro ../glwidget.h \
 		../face.h \
-		../viewer_widget.h ../faces_viewer.cpp \
+		../viewer_widget.h \
+		../pgm3d.h ../faces_viewer.cpp \
 		../glwidget.cpp \
 		../face.cpp \
 		../viewer_widget.cpp
@@ -288,7 +289,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../glwidget.h ../face.h ../viewer_widget.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../glwidget.h ../face.h ../viewer_widget.h ../pgm3d.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../faces_viewer.cpp ../glwidget.cpp ../face.cpp ../viewer_widget.cpp $(DISTDIR)/
 
 
@@ -317,12 +318,12 @@ compiler_moc_header_clean:
 	-$(DEL_FILE) moc_glwidget.cpp moc_viewer_widget.cpp
 moc_glwidget.cpp: ../face.h \
 		../glwidget.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/daniel/Documents/Reconstruction/td4/code -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../glwidget.h -o moc_glwidget.cpp
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/daniel/Documents/Reconstruction/td5/code -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../glwidget.h -o moc_glwidget.cpp
 
 moc_viewer_widget.cpp: ../glwidget.h \
 		../face.h \
 		../viewer_widget.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/daniel/Documents/Reconstruction/td4/code -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../viewer_widget.h -o moc_viewer_widget.cpp
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I/home/daniel/Documents/Reconstruction/td5/code -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../viewer_widget.h -o moc_viewer_widget.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -347,7 +348,8 @@ glwidget.o: ../glwidget.cpp ../glwidget.h \
 		../face.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o glwidget.o ../glwidget.cpp
 
-face.o: ../face.cpp ../face.h
+face.o: ../face.cpp ../face.h \
+		../pgm3d.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o face.o ../face.cpp
 
 viewer_widget.o: ../viewer_widget.cpp ../viewer_widget.h \

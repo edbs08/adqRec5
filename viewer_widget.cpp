@@ -3,7 +3,20 @@
 #include <QFileDialog>
 #include <iostream>
 
+/*
+ * Constant vales
+ */
+static const int WINDOW_SIZE = 15;
+static const int MAX_SLIDER_VALUE = 255;
+
+/*
+ * namespaces
+ */
 using namespace std;
+
+/*
+ * Function and method definitions
+ */
 ViewerWidget::ViewerWidget() {
   layout = new QGridLayout(this);
   load_file_button = new QPushButton("Load file");
@@ -13,69 +26,89 @@ ViewerWidget::ViewerWidget() {
   gl_widget = new GLWidget(this);
   checkbox = new QCheckBox("Draw Edges", this);
 
+  int col_counter = 0;
+  int col_counter2 = 2;
+
   /*Load file*/
-  layout->addWidget(load_file_button, 0, 0);
+  layout->addWidget(load_file_button, col_counter, 0);
+  col_counter++;
   connect(load_file_button, SIGNAL(released()), this, SLOT(loadFile()));
 
+
   /*Save image*/
-  layout->addWidget(save_file_button, 1, 0);
+  layout->addWidget(save_file_button, col_counter, 0);
+  col_counter++;
   connect(save_file_button, SIGNAL(released()), this, SLOT(saveImage()));
 
-  int widget_size = 15;
   /*Widget*/
-  layout->addWidget(gl_widget,2,0,widget_size,1);
+  layout->addWidget(gl_widget,col_counter,0,WINDOW_SIZE,1);
+  col_counter+=WINDOW_SIZE;
+  col_counter++;
 
   /*Alpha Slider*/
   QLabel* minimumLabel = new QLabel(tr("Transparency"));
   layout->addWidget(minimumLabel);
-  layout->addWidget(slider,widget_size+3,0);
+  layout->addWidget(slider,col_counter,0);
+  col_counter++;
   slider-> setRange(0,100);
   slider-> setTickInterval(1);
   connect(slider, SIGNAL(valueChanged(int)), this, SLOT(alphaSlide(int)));
 
   /*Sorting option*/
-  layout->addWidget(SortingOption,widget_size+4,0);
+  layout->addWidget(SortingOption,col_counter,0);
+  col_counter++;
   SortingOption->addItem("Sorting ON");
   SortingOption->addItem("Sorting OFF");
   connect(SortingOption, SIGNAL(currentIndexChanged(int)), this, SLOT(SortingChanged(int)));
 
   /*Volume Color option*/
-  layout->addWidget(ColorChange, 2,1);
+  layout->addWidget(ColorChange, col_counter2,1);
+  col_counter2++;
   connect(ColorChange, SIGNAL(currentIndexChanged(int)), this, SLOT(ColorChanged(int)));
 
   QLabel* Red = new QLabel(tr("R"));
-  layout->addWidget(Red,3,1);
-  layout->addWidget(slider_R,4,1);
-  slider-> setRange(0,255);
+  layout->addWidget(Red,col_counter2,1);
+  col_counter2++;
+  layout->addWidget(slider_R,col_counter2,1);
+  col_counter2++;
+  slider-> setRange(0,MAX_SLIDER_VALUE);
   slider-> setTickInterval(1);
   connect(slider_R, SIGNAL(valueChanged(int)), this, SLOT(update_slider_R(int)));
 
   QLabel* Green = new QLabel(tr("G"));
-  layout->addWidget(Green,5,1);
-  layout->addWidget(slider_G,6,1);
-  slider-> setRange(0,255);
+  layout->addWidget(Green,col_counter2,1);
+  col_counter2++;
+  layout->addWidget(slider_G,col_counter2,1);
+  col_counter2++;
+  slider-> setRange(0,MAX_SLIDER_VALUE);
   slider-> setTickInterval(1);
   connect(slider_G, SIGNAL(valueChanged(int)), this, SLOT(update_slider_G(int)));
 
   QLabel* Blue = new QLabel(tr("B"));
-  layout->addWidget(Blue,7,1);
-  layout->addWidget(slider_B,8,1);
-  slider-> setRange(0,255);
+  layout->addWidget(Blue,col_counter2,1);
+  col_counter2++;
+  layout->addWidget(slider_B,col_counter2,1);
+  col_counter2++;
+  slider-> setRange(0,MAX_SLIDER_VALUE);
   slider-> setTickInterval(1);
   connect(slider_B, SIGNAL(valueChanged(int)), this, SLOT(update_slider_B(int)));
 
-  layout->addWidget(save_color,9,1);
+  layout->addWidget(save_color,col_counter2,1);
+  col_counter2++;
   connect(save_color, SIGNAL(released()), this, SLOT(saveColor()));
 
-  layout->addWidget(reset_colors,10,1);
+  layout->addWidget(reset_colors,col_counter2,1);
+  col_counter2++;
   connect(reset_colors, SIGNAL(released()), this, SLOT(resetColors()));
 
   /*Draw Edges option*/
-  layout->addWidget(checkbox, widget_size+5, 0);
+  layout->addWidget(checkbox, col_counter, 0);
+  col_counter++;
   connect(checkbox, SIGNAL(clicked(bool)), this, SLOT(getEdgeBool(bool)));
 
   /*Cutting View Option*/
-  layout->addWidget(cutBox,widget_size+6,0);
+  layout->addWidget(cutBox,col_counter,0);
+  col_counter++;
   cutBox->addItem("No Cut");
   cutBox->addItem("X_Cut");
   cutBox->addItem("NEG_X_Cut");

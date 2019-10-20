@@ -4,6 +4,14 @@
 #include "pgm3d.h"
 #include <algorithm>
 
+/*
+ * Constant values
+ */
+static const int NO_COLOR_SELECTED = -1;
+
+/*
+ * Functions definitions
+ */
 QJsonArray vectorToJson(const QVector3D &vector) {
   QJsonArray result;
   for (int dim = 0; dim < 3; dim++)
@@ -109,13 +117,14 @@ void FaceCollection::fromStl(const QString &path)
 }
 
 void FaceCollection::frompgm3D(const QString &path) {
+    type = GL_QUADS;
+    faces.clear();
     std::ifstream pgmFile;
     pgmFile.open(path.toStdString().c_str());
     if(!pgmFile) // check if file can be found
     {
         std::cout<<"PGM-3D file not found."<<std::endl;
     }
-    type = GL_QUADS;
     std::ifstream data(path.toStdString().c_str());
 
     string name;
@@ -155,20 +164,16 @@ void FaceCollection::frompgm3D(const QString &path) {
           model3D.voxel_val.push_back(value);
       }
   }
-
-
   model3D.get_all_faces(faces);
   analyze_loaded_object();
-
 }
-
 
 void FaceCollection::analyze_loaded_object(void)
 {
     init_scale = 1;
     float max_value = 0;
     colors.clear(); //Clear the color vector
-    colors.push_back(-1); //Color not selected
+    colors.push_back(NO_COLOR_SELECTED); //Color not selected
     for (int face_index=0;face_index<faces.size();face_index++)
     {
         /*Analysis for the colors and shapes*/
