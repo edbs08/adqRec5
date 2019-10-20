@@ -1,0 +1,25 @@
+/*********************************************
+* ****  3D OBJECT VIEWER  ****
+* 
+* Authors: Daniel Bravo Solis, 
+*   Frances Ryan, 
+*   Enrique Sepúlveda 
+*   Jorcano, 
+*   Zahra Seyd
+**********************************************/
+This program loads 3D models of different formats and offers a visual interface for ease the analysis. 
+For further details, please refer to the user's manual.
+
+INSTRUCTIONS:
+To build the project run the following command in the terminal, 
+on the level of the source files:
+	mkdir build && cd build && qmake -qt=qt5 .. && make
+
+To run the project, once in the build folder run the following command:
+	./faces_viewer 
+
+Or also, loading the model from the start:
+	./face_viewer <file_path>
+
+
+
